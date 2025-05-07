@@ -22,6 +22,8 @@ sequelize.authenticate()
     process.exit(1); 
   });
 
+// Route files
+const customerRoutes = require('./routes/customers');
 
 const app = express();
 
@@ -30,6 +32,9 @@ app.use(express.json());
 
 // Cookie Parser
 app.use(cookieParser());
+
+// Mount routers
+app.use('/api/customers', customerRoutes);
 
 const PORT = process.env.PORT || 5000;
 

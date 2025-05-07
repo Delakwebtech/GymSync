@@ -17,62 +17,82 @@ exports.createCustomer = asyncHandler(async (req, res) => {
 exports.getAllCustomers = asyncHandler(async (req, res) => {
     const customers = await Customer.findAll({ include: 'instructor' });
 
+    // If no customers found, return error
+    if (!customers) {
+        return next(
+            new ErrorResponse('No customer found', 404)
+        );
+    }
+
     res.status(200).json({ success: true, data: customers });
 });
 
 // @desc    Get single customer
 // @route   GET /api/customers/:id
 // @access  Private
-exports.getCustomer = async (req, res) => {
-  try {
+exports.getCustomer = asyncHandler(async (req, res) => {
     const customer = await Customer.findByPk(req.params.id, {
       include: 'instructor'
     });
-    if (!customer) return res.status(404).json({ message: 'Customer not found' });
-    res.status(200).json({ success: true, data: customer });
-  } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
-  }
-};
 
-// Update customer
-exports.updateCustomer = async (req, res) => {
-  try {
+    // If no customers found, return error
+    if (!customer) {
+        return next(
+            new ErrorResponse(`Customer with id ${req.params.id} not found`, 404)
+        );
+    }
+
+    res.status(200).json({ success: true, data: customer });  
+});
+
+// @desc    Update customer
+// @route   PUT /api/customers/:id
+// @access  Private
+exports.updateCustomer = asyncHandler(async (req, res) => {
     const customer = await Customer.findByPk(req.params.id);
-    if (!customer) return res.status(404).json({ message: 'Customer not found' });
 
-    await customer.update(req.body);
-    res.status(200).json({ success: true, data: customer });
-  } catch (err) {
-    res.status(400).json({ success: false, message: err.message });
-  }
-};
+    // If the customer is not found, return an error
+    if (!customer) {
+        return next(new ErrorResponse(`Customer with id ${req.params.id} not found`, 404));
+    }
 
-// Delete customer
-exports.deleteCustomer = async (req, res) => {
-  try {
+    const updatedCustomer = await customer.update(req.body);
+
+    res.status(200).json({ success: true, data: updatedCustomer });    
+});
+
+// @desc    Delete customer
+// @route   DELETE /api/customers/:id
+// @access  Private
+exports.deleteCustomer = asyncHandler(async (req, res) => {
     const customer = await Customer.findByPk(req.params.id);
-    if (!customer) return res.status(404).json({ message: 'Customer not found' });
+
+    // If the customer is not found, return an error
+    if (!customer) {
+        return next(new ErrorResponse(`Customer with id ${req.params.id} not found`, 404));
+    }
 
     await customer.destroy();
-    res.status(200).json({ success: true, message: 'Customer deleted' });
-  } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
-  }
-};
 
-// Assign instructor
-exports.assignInstructor = async (req, res) => {
-  try {
+    res.status(200).json({ success: true, data: {} });
+});
+
+// @desc    Assign instructor
+// @route   POST /api/customers/:id/assign-instructor
+// @access  Private
+exports.assignInstructor = asyncHandler(async (req, res) => {
     const { instructorId } = req.body;
+    
     const customer = await Customer.findByPk(req.params.id);
-    if (!customer) return res.status(404).json({ message: 'Customer not found' });
+
+    // If the customer is not found, return an error
+    if (!customer) {
+        return next(new ErrorResponse(`Customer with id ${req.params.id} not found`, 404));
+    }
 
     customer.assignedInstructorId = instructorId;
+    
     await customer.save();
 
     res.status(200).json({ success: true, data: customer });
-  } catch (err) {
-    res.status(400).json({ success: false, message: err.message });
-  }
-};
+});
