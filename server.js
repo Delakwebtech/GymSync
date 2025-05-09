@@ -24,6 +24,7 @@ sequelize.authenticate()
 
 // Route files
 const customerRoutes = require('./routes/customers');
+const instructorRoutes = require('./routes/instructors');
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.use(cookieParser());
 
 // Mount routers
 app.use('/api/customers', customerRoutes);
+app.use('/api/instructors', instructorRoutes);
 
 const PORT = process.env.PORT || 5000;
 
