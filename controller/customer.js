@@ -1,11 +1,12 @@
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const Customer = require('../models/Customers');
+const Instructor = require('../models/Instructors');
 
 // @desc    Register new customer
 // @route   POST /api/customers
 // @access  Private
-exports.createCustomer = asyncHandler(async (req, res) => {
+exports.createCustomer = asyncHandler(async (req, res, next) => {
     const customer = await Customer.create(req.body);
 
     res.status(201).json({ success: true, data: customer });
@@ -14,7 +15,7 @@ exports.createCustomer = asyncHandler(async (req, res) => {
 // @desc    Get all customers
 // @route   GET /api/customers
 // @access  Private
-exports.getAllCustomers = asyncHandler(async (req, res) => {
+exports.getAllCustomers = asyncHandler(async (req, res, next) => {
     const customers = await Customer.findAll({ include: 'instructor' });
 
     // If no customers found, return error
@@ -30,7 +31,7 @@ exports.getAllCustomers = asyncHandler(async (req, res) => {
 // @desc    Get single customer
 // @route   GET /api/customers/:id
 // @access  Private
-exports.getCustomer = asyncHandler(async (req, res) => {
+exports.getCustomer = asyncHandler(async (req, res, next) => {
     const customer = await Customer.findByPk(req.params.id, {
       include: 'instructor'
     });
@@ -48,7 +49,7 @@ exports.getCustomer = asyncHandler(async (req, res) => {
 // @desc    Update customer
 // @route   PUT /api/customers/:id
 // @access  Private
-exports.updateCustomer = asyncHandler(async (req, res) => {
+exports.updateCustomer = asyncHandler(async (req, res, next) => {
     const customer = await Customer.findByPk(req.params.id);
 
     // If the customer is not found, return an error
@@ -64,7 +65,7 @@ exports.updateCustomer = asyncHandler(async (req, res) => {
 // @desc    Delete customer
 // @route   DELETE /api/customers/:id
 // @access  Private
-exports.deleteCustomer = asyncHandler(async (req, res) => {
+exports.deleteCustomer = asyncHandler(async (req, res, next) => {
     const customer = await Customer.findByPk(req.params.id);
 
     // If the customer is not found, return an error
@@ -80,7 +81,7 @@ exports.deleteCustomer = asyncHandler(async (req, res) => {
 // @desc    Assign instructor
 // @route   POST /api/customers/:id/assign-instructor
 // @access  Private
-exports.assignInstructor = asyncHandler(async (req, res) => {
+exports.assignInstructor = asyncHandler(async (req, res, next) => {
     const { instructorId } = req.body;
     
     const customer = await Customer.findByPk(req.params.id);

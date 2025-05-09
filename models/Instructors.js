@@ -1,8 +1,8 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
 
-const Customer = sequelize.define("Customer", {
-    customerId: {
+const Instructor = sequelize.define("Instructor", {
+    instructorId: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
@@ -31,34 +31,15 @@ const Customer = sequelize.define("Customer", {
         allowNull: true,
         validate: { isEmail: true }
     },
-    assignedInstructorId: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        references: {
-            model: 'Instructors',
-            key: 'instructorId',
-        },
-        type: DataTypes.UUID,
-    },
-    lastCheckIn: {
-        type: DataTypes.DATE,
-        allowNull: true,
-    },
     status: {
         type: DataTypes.ENUM('active', 'inactive'),
         defaultValue: 'active',
-        allowNull: false,
     },
 });
 
-// Customer.belongsTo(models.Instructor, {
+// Instructor.hasMany(models.Customer, {
 //     foreignKey: 'assignedInstructorId',
-//     as: 'instructor',
+//     as: 'customers',
 // });
 
-// Customer.hasMany(models.Attendance, {
-//     foreignKey: 'customerId',
-//     as: 'attendances',
-// });
-
-module.exports = Customer;
+module.exports = Instructor;
