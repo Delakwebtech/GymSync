@@ -1,7 +1,7 @@
 const dotenv = require("dotenv");
 
 // Load env vars
-const path = require("path");
+// const path = require("path");
 dotenv.config({ path: "./config/config.env" });
 
 const express = require("express");
@@ -23,6 +23,7 @@ sequelize.authenticate()
   });
 
 // Route files
+const authRoutes = require('./routes/auth');
 const customerRoutes = require('./routes/customers');
 const instructorRoutes = require('./routes/instructors');
 
@@ -37,6 +38,7 @@ app.use(cookieParser());
 // Mount routers
 app.use('/api/customers', customerRoutes);
 app.use('/api/instructors', instructorRoutes);
+app.use('/api/auth', authRoutes);
 
 const PORT = process.env.PORT || 5000;
 
