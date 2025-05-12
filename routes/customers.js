@@ -14,18 +14,18 @@ const { protect, authorize } = require('../middleware/auth');
 // Admin or receptionist only
 router
   .route('/')
-  .post(protect, authorize('admin', 'receptionist'), createCustomer)
-  .get(protect, authorize('admin', 'receptionist'), getAllCustomers);
+  .post(protect, authorize('superadmin', 'admin'), createCustomer)
+  .get(protect, authorize('superadmin', 'admin'), getAllCustomers);
 
 router
   .route('/:id')
-  .get(protect, authorize('admin', 'receptionist', 'instructor'), getCustomer)
-  .put(protect, authorize('admin', 'receptionist'), updateCustomer)
-  .delete(protect, authorize('admin'), deleteCustomer);
+  .get(protect, authorize('superadmin', 'admin', 'instructor'), getCustomer)
+  .put(protect, authorize('superadmin', 'admin'), updateCustomer)
+  .delete(protect, authorize('superadmin'), deleteCustomer);
 
 // Assign instructor
 router
   .route('/:id/assign-instructor')
-  .put(protect, authorize('admin', 'receptionist'), assignInstructor);
+  .put(protect, authorize('superadmin', 'admin'), assignInstructor);
 
 module.exports = router;
