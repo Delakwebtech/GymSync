@@ -37,6 +37,13 @@ const Instructor = sequelize.define("Instructor", {
     },
 });
 
+Instructor.associate = (models) => {
+    Instructor.hasMany(models.Customer, {
+        foreignKey: 'assignedInstructorId',
+        as: 'customers',
+    });
+};
+
 // Instructor.hasMany(models.Customer, {
 //     foreignKey: 'assignedInstructorId',
 //     as: 'customers',
