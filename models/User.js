@@ -4,12 +4,11 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const User = sequelize.define('User', {
-  username: {
+  fullName: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
   },
-  fullName: {
+  email: {
     type: DataTypes.STRING,
     allowNull: false,
     unique: true,
@@ -18,11 +17,6 @@ const User = sequelize.define('User', {
         msg: 'Please add a valid email',
       },
     },
-  },
-  role: {
-    type: DataTypes.STRING,
-    enum: DataTypes.ENUM('superadmin', 'admin', 'instructor'),
-    default: 'admin'
   },
   password: {
     type: DataTypes.STRING,
@@ -33,6 +27,11 @@ const User = sequelize.define('User', {
         msg: 'Password must be at least 6 characters long',
       },
     },
+  },
+  role: {
+    type: DataTypes.STRING,
+    enum: DataTypes.ENUM('superadmin', 'admin', 'instructor'),
+    default: 'admin'
   },
   createdAt: {
     type: DataTypes.DATE,
