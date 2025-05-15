@@ -3,8 +3,8 @@ const sequelize = require("../config/db");
 
 const Customer = sequelize.define("Customer", {
     customerId: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
         primaryKey: true,
     },
     fullName: {
@@ -32,7 +32,7 @@ const Customer = sequelize.define("Customer", {
         validate: { isEmail: true }
     },
     assignedInstructorId: {
-        type: DataTypes.UUID,
+        type: DataTypes.INTEGER,
         allowNull: true,
     },
     lastCheckIn: {
@@ -58,15 +58,5 @@ Customer.associate = (models) => {
         as: 'attendances',
     });
 };
-
-// Customer.belongsTo(models.Instructor, {
-//     foreignKey: 'assignedInstructorId',
-//     as: 'instructor',
-// });
-
-// Customer.hasMany(models.Attendance, {
-//     foreignKey: 'customerId',
-//     as: 'attendances',
-// });
 
 module.exports = Customer;

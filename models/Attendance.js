@@ -3,12 +3,12 @@ const sequelize = require("../config/db");
 
 const Attendance = sequelize.define("Attendance", {
     attendanceId: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
         primaryKey: true,
     },
     customerId: {
-        type: DataTypes.UUID,
+        type: DataTypes.INTEGER,
         allowNull: false,
     },
     timestamp: {
