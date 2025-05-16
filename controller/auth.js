@@ -1,17 +1,18 @@
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
-const { User } = require('../models/User');
+const User = require('../models/User');
 
 // @desc    Register User
 // @route   POST /api/auth/register
 // @access  Public
 exports.register = asyncHandler(async (req, res, next) => {
-    const { fullName, email, role, password } = req.body;
+    const { fullName, phoneNumber, email, role, password } = req.body;
 
     try {
         // Create User
         const user = await User.create({
             fullName,
+            phoneNumber,
             email,
             role,
             password
@@ -38,7 +39,7 @@ exports.login = asyncHandler(async (req, res, next) => {
         // Check for user
         const user = await User.findOne({
             where: { email },
-            attributes: ['id', 'email', 'password'] 
+            attributes: ['userId', 'email', 'password'] 
         });
 
         if (!user) {
