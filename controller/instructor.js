@@ -1,14 +1,25 @@
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const Customer = require('../models/Customers');
-const Instructor = require('../models/Instructors');
 const User = require('../models/User');
 
 // @desc    Register new instructor
 // @route   POST /api/instructors
 // @access  Private
 exports.createInstructor = asyncHandler(async (req, res, next) => {
-    const instructor = await Instructor.create(req.body);
+    
+    const { fullName, phoneNumber, email, password } = req.body;
+
+    // Create new user with role 'instructor'
+    const instructor = await User.create({
+      fullName,
+      phoneNumber,
+      email,
+      password,
+      role: 'instructor'
+    });
+    
+    // const instructor = await User.create(req.body);
 
     res.status(201).json({ success: true, data: instructor });
 });
@@ -33,8 +44,8 @@ exports.getAllInstructors = asyncHandler(async (req, res, next) => {
 // @route   GET /api/instructors/:id
 // @access  Private
 exports.getInstructor = asyncHandler(async (req, res, next) => {
-    const instructor = await Instructor.findByPk(req.params.id, {
-        include: Customer,
+    const instructor = await User.findOne({ 
+        where: { userId: req.params.id, role: 'instructor' } 
     });
 
     // If no instructor found, return error
@@ -52,7 +63,9 @@ exports.getInstructor = asyncHandler(async (req, res, next) => {
 // @route   PUT /api/instructors/:id
 // @access  Private
 exports.updateInstructor = asyncHandler(async (req, res, next) => {
-    const instructor = await Instructor.findByPk(req.params.id);
+    const instructor = await User.findOne({ 
+        where: { userId: req.params.id, role: 'instructor' } 
+    });
 
     // If the instructor is not found, return an error
     if (!instructor) {
@@ -70,7 +83,9 @@ exports.updateInstructor = asyncHandler(async (req, res, next) => {
 // @route   DELETE /api/instructors/:id
 // @access  Private
 exports.deleteInstructor = asyncHandler(async (req, res, next) => {
-    const instructor = await Instructor.findByPk(req.params.id);
+    const instructor = await User.findOne({ 
+        where: { userId: req.params.id, role: 'instructor' } 
+    });
 
     // If the customer is not found, return an error
     if (!instructor) {
