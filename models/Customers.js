@@ -28,12 +28,21 @@ const Customer = sequelize.define("Customer", {
     },
     email: {
         type: DataTypes.STRING,
-        allowNull: true,
-        validate: { isEmail: true }
+        allowNull: false,
+        unique: true,
+        validate: {
+            isEmail: {
+                msg: 'Please add a valid email',
+            },
+        },
     },
     assignedInstructorId: {
         type: DataTypes.INTEGER,
         allowNull: true,
+        references: {
+            model: "Users",
+            key: "userId",
+        },
     },
     lastCheckIn: {
         type: DataTypes.DATE,
@@ -48,7 +57,7 @@ const Customer = sequelize.define("Customer", {
 
 // Define associations as a static method
 Customer.associate = (models) => {
-    Customer.belongsTo(models.Instructor, {
+    Customer.belongsTo(models.User, {
         foreignKey: 'assignedInstructorId',
         as: 'instructor',
     });
