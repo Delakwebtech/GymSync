@@ -2,6 +2,7 @@ const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const Customer = require('../models/Customers');
 const Instructor = require('../models/Instructors');
+const User = require('../models/User');
 
 // @desc    Register new instructor
 // @route   POST /api/instructors
@@ -16,7 +17,7 @@ exports.createInstructor = asyncHandler(async (req, res, next) => {
 // @route   GET /api/instructors
 // @access  Private
 exports.getAllInstructors = asyncHandler(async (req, res, next) => {
-    const instructors = await Instructor.findAll({ include: 'customers' });
+    const instructors = await User.findAll({ where: { role: 'instructor' } });
 
     // If no instructors found, return error
     if (!instructors) {
@@ -33,7 +34,7 @@ exports.getAllInstructors = asyncHandler(async (req, res, next) => {
 // @access  Private
 exports.getInstructor = asyncHandler(async (req, res, next) => {
     const instructor = await Instructor.findByPk(req.params.id, {
-        include: 'customers',
+        include: Customer,
     });
 
     // If no instructor found, return error
