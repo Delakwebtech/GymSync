@@ -26,7 +26,7 @@ sequelize.authenticate()
     });
 
     // Sync models and create tables if not exist
-    // return sequelize.sync({ alter: true });
+    // return sequelize.sync({ force: true });
   
   })
   .catch(err => {
