@@ -7,23 +7,24 @@ dotenv.config({ path: "./config/config.env" });
 const express = require("express");
 const cookieParser = require("cookie-parser");
 
+// Load models
+const User = require('./models/User');
+const Customer = require('./models/Customers');
+const Attendance = require('./models/Attendance');
+
+// Set up associations
+const models = { User, Customer, Attendance };
+Object.values(models).forEach((model) => {
+  if (model.associate) {
+    model.associate(models);
+  }
+});
+
 // Connect to database
 const sequelize = require("./config/db");
 sequelize.authenticate()
   .then(() => {
     console.log('Database connected successfully');
-
-    // Load models and call associate methods
-    const Customer = require('./models/Customers');
-    const Instructor = require('./models/Instructors');
-    const Attendance = require('./models/Attendance');
-
-    const models = { Customer, Instructor, Attendance };
-    Object.values(models).forEach((model) => {
-      if (model.associate) {
-        model.associate(models);
-      }
-    });
 
     // Sync models and create tables if not exist
     // return sequelize.sync({ force: true });

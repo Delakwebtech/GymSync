@@ -4,9 +4,29 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const User = sequelize.define('User', {
+  userId: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+  },
   fullName: {
     type: DataTypes.STRING,
     allowNull: false,
+    validate: {
+      notEmpty: {
+          msg: 'Please add a name'
+      }
+    }
+  },
+  phoneNumber: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      validate: {
+          notEmpty: {
+              msg: 'Please add a phone number'
+          }
+      }
   },
   email: {
     type: DataTypes.STRING,
@@ -58,7 +78,7 @@ const User = sequelize.define('User', {
 
 // Sign JWT and return
 User.prototype.getSignedJwtToken = function () {
-  return jwt.sign({ id: this.id }, process.env.JWT_SECRET, {
+  return jwt.sign({ id: this.userId }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRE,
   });
 };
@@ -68,4 +88,12 @@ User.prototype.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-module.exports = { User }; 
+// Define associations
+User.associate = (models) => {
+  User.hasMany(models.Customer, {
+    foreignKey: 'assignedInstructorId',
+    as: 'customers',
+  });
+};
+
+module.exports = User; 

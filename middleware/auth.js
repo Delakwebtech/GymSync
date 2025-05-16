@@ -13,20 +13,20 @@ exports.protect = asyncHandler(async(req, res, next) => {
 
     // Make sure token exists
     if(!token) {
-        return next(new ErrorResponse('Not authorize to access this route', 401));
+        return next(new ErrorResponse('Not authorize to access this route, no token', 401));
     }
 
     try {
         // verify token
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        console.log(decoded);
+        // console.log(decoded);
 
         req.user = await User.findByPk(decoded.id);
 
         next();
     } catch (err) {
-        return next(new ErrorResponse('Not authorize to access this route', 401));
+        return next(new ErrorResponse('Not authorize to access this route, user not found', 401));
     }
 });
 
