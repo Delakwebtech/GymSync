@@ -28,16 +28,8 @@ exports.createInstructor = asyncHandler(async (req, res, next) => {
 // @route   GET /api/instructors
 // @access  Private
 exports.getAllInstructors = asyncHandler(async (req, res, next) => {
-    const instructors = await User.findAll({ where: { role: 'instructor' } });
 
-    // If no instructors found, return error
-    if (!instructors) {
-        return next(
-            new ErrorResponse('No instructor found', 404)
-        );
-    }
-
-    res.status(200).json({ success: true, data: instructors });
+    res.status(200).json(res.advancedResults);
 });
 
 // @desc    Get single instructor
