@@ -10,12 +10,15 @@ const {
 
 const router = express.Router();
 const { protect, authorize } = require('../middleware/auth');
+const Customer = require('../models/Customers');
+const User = require('../models/User');
+const advancedResults = require('../middleware/advancedResults');
 
 // Admin or receptionist only
 router
   .route('/')
   .post(protect, authorize('superadmin', 'admin'), createCustomer)
-  .get(protect, authorize('superadmin', 'admin'), getAllCustomers);
+  .get(protect, authorize('superadmin', 'admin'), advancedResults(Customer, 'instructor'), getAllCustomers);
 
 router
   .route('/:id')
