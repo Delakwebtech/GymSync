@@ -3,6 +3,7 @@ const asyncHandler = require('../middleware/async');
 const Customer = require('../models/Customers');
 const Instructor = require('../models/User');
 
+
 // @desc    Register new customer
 // @route   POST /api/customers
 // @access  Private
@@ -16,7 +17,7 @@ exports.createCustomer = asyncHandler(async (req, res, next) => {
 // @route   GET /api/customers
 // @access  Private
 exports.getAllCustomers = asyncHandler(async (req, res, next) => {
-    const customers = await Customer.findAll({ include: 'instructor' });
+    const customers = await Customer.findAll();
 
     // If no customers found, return error
     if (!customers) {
@@ -25,7 +26,7 @@ exports.getAllCustomers = asyncHandler(async (req, res, next) => {
         );
     }
 
-    res.status(200).json({ success: true, data: customers });
+    res.status(200).json(res.advancedResults);
 });
 
 // @desc    Get single customer
