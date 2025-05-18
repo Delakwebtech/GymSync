@@ -5,6 +5,8 @@ const dotenv = require("dotenv");
 dotenv.config({ path: "./config/config.env" });
 
 const express = require("express");
+const errorHandler = require("./middleware/error");
+const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 
 // Load models
@@ -52,6 +54,8 @@ app.use(cookieParser());
 app.use('/api/customers', customerRoutes);
 app.use('/api/instructors', instructorRoutes);
 app.use('/api/auth', authRoutes);
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
