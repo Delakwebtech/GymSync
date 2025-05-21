@@ -1,7 +1,6 @@
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const Customer = require('../models/Customers');
-const Instructor = require('../models/User');
 
 
 // @desc    Register new customer
