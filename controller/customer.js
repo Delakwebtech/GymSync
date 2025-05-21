@@ -79,7 +79,7 @@ exports.deleteCustomer = asyncHandler(async (req, res, next) => {
 });
 
 // @desc    Assign instructor
-// @route   POST /api/customers/:id/assign-instructor
+// @route   PUT /api/customers/:id/assign-instructor
 // @access  Private
 exports.assignInstructor = asyncHandler(async (req, res, next) => {
     const { instructorId } = req.body;
