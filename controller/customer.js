@@ -1,6 +1,7 @@
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const Customer = require('../models/Customers');
+const User = require('../models/User');
 
 
 // @desc    Register new customer
@@ -33,7 +34,11 @@ exports.getAllCustomers = asyncHandler(async (req, res, next) => {
 // @access  Private
 exports.getCustomer = asyncHandler(async (req, res, next) => {
     const customer = await Customer.findByPk(req.params.id, {
-      include: 'instructor'
+        include: {
+            model: User,
+            as: 'instructor',
+            attributes: ['userId', 'fullName', 'email'],
+        },
     });
 
     // If no customers found, return error
