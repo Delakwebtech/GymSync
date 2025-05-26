@@ -11,7 +11,6 @@ exports.checkInCustomer = asyncHandler(async (req, res, next) => {
 
     const customer = await Customer.findByPk(customerId);
 
-
     if (!customer) {
         return next(
             new ErrorResponse(`Customer with id ${customerId} not found`, 404)
