@@ -5,24 +5,24 @@ const User = require('../models/User');
 // @desc    Register User
 // @route   POST /api/auth/register
 // @access  Public
-// exports.register = asyncHandler(async (req, res, next) => {
-//     const { fullName, phoneNumber, email, role, password } = req.body;
+exports.register = asyncHandler(async (req, res, next) => {
+    const { fullName, phoneNumber, email, role, password } = req.body;
 
-//     try {
-//         // Create User
-//         const user = await User.create({
-//             fullName,
-//             phoneNumber,
-//             email,
-//             role,
-//             password
-//         });
+    try {
+        // Create User
+        const user = await User.create({
+            fullName,
+            phoneNumber,
+            email,
+            role,
+            password
+        });
 
-//         sendTokenResponse(user, 200, res);
-//     } catch (error) {
-//         return next(new ErrorResponse(error.message, 400));
-//     }
-// });
+        sendTokenResponse(user, 200, res);
+    } catch (error) {
+        return next(new ErrorResponse(error.message, 400));
+    }
+});
 
 // @desc    Login User
 // @route   POST /api/auth/login
